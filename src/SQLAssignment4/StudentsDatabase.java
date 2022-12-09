@@ -99,40 +99,62 @@ public class StudentsDatabase implements StudentsDatabaseInterface, TableInterfa
         }
 
     }
-//    public class Students{
-//        Students() {
-//            try (Connection connection1 = DriverManager.getConnection(url+dbName, username, password)) {
-//                PreparedStatement stmt = connection1.prepareStatement(StudentsDatabaseInterface.createTableStudents);
-//                stmt.executeUpdate();
-//                System.out.println("Students Table created");
-//            }
-//            catch (SQLException e){
-//                System.out.println("Students Table NOT created");
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        public Students(String createTable, String nameTable) {
-//        }
-//    }
-    public class Courses{
-        private String courseID;
-        private String courseTitle;
-        private String department;
+    public class Students{
+        String createTable;
+        String populateTable;
 
-        public Courses(String createTable, String nameToTable, String nameFromTable) {
+        String nameTable;
+
+        public Students (String createTable, String nameTable) throws SQLException {
+            this.createTable = createTable;
+            this.nameTable = nameTable;
+
+            // Create Table
+            TableInterface.dropTable(connection, nameTable);
+            TableInterface.createTable(connection, createTable);
+
+            // Populate Table
+            //TableInterface.populateTable(connection, populateTable);
+        }
+    }
+    public class Courses{
+    String createTable;
+    String populateTable;
+    String nameFromTable;
+    String nameToTable;
+
+        public Courses(String createTable, String nameToTable, String nameFromTable) throws SQLException {
+            this.createTable = createTable;
+            this.nameFromTable = nameFromTable;
+            this.nameToTable = nameToTable;
+            this.populateTable = StudentsDatabaseInterface.insertTableCourses(nameToTable,nameFromTable);
+
+
+            // Create Table
+            TableInterface.dropTable(connection, nameToTable);
+            TableInterface.createTable(connection, createTable);
+
+            // Populate Table
+            TableInterface.populateTable(connection, populateTable);
         }
     }
     public class Classes{
-        private String courseID;
-        private int studentID; //SAME AS EMPID
-        private int sectionNo;
-        private int year;
-        private mySemester semester;
-        private myGrade grade;
+        String createTable;
+        String populateTable;
+        String nameTable;
+
+        public Classes(String createTable, String nameTable) throws SQLException {
+            this.createTable = createTable;
+            this.nameTable = nameTable;
+            //this.populateTable = StudentsDatabaseInterface.insertTableClasses(nameTable, "Students.Schedule");
 
 
-        public Classes(String createTable, String nameTable) {
+            // Create Table
+            TableInterface.dropTable(connection, nameTable);
+            TableInterface.createTable(connection, createTable);
+
+            // Populate Table
+            //TableInterface.populateTable(connection, populateTable);
         }
     }
     public class AggregateGrades{

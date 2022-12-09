@@ -32,7 +32,10 @@ public interface TableInterface {
             psCreateTable.executeUpdate();
             System.out.println("\nTable created successfully!");
         }
-        catch (SQLException e) {System.out.println(e);}
+        catch (SQLException e) {
+            System.out.println("\nError in createTable!");
+            System.out.println(e);
+        }
     }
 
     // Set Local in file parameter for local data loading: MySQL server
@@ -49,12 +52,13 @@ public interface TableInterface {
         ResultSet RS = null;
 
         return RS;
-
     }
 
     static String loadDataInFileTable(String fileName, String nameTable) {
-        return "LOAD DATA LOCAL INFILE '" + fileName + "' INTO TABLE " + nameTable;
-
+        return "LOAD DATA LOCAL INFILE '" + fileName + "' INTO TABLE " + nameTable +
+                " FIELDS TERMINATED BY '\t'" +
+                " LINES TERMINATED BY '\n'" +
+                " IGNORE 1 LINES;";
     }
 
     static void populateTable(Connection connection, String populateTable) throws SQLException {
@@ -67,9 +71,5 @@ public interface TableInterface {
             System.out.println("\nError in populate Table");
             System.out.println(e);
         }
-
-
-
     }
-
 }

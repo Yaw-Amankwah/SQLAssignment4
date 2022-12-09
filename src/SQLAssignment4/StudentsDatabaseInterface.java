@@ -12,16 +12,16 @@ public interface StudentsDatabaseInterface {
             "department CHAR(16), " +
             "program VARCHAR(48), " +
             "PRIMARY KEY(courseId))";//, sectionNumber))";
-    String createTableStudents = "CREATE TABLE Students.Student (" +
+    String createTableStudents = "CREATE TABLE Students.Students (" +
             "empId INT PRIMARY KEY, " +
             "name VARCHAR(32) NOT NULL, " +
             "gender CHAR CHECK (gender = 'F' OR gender = 'M' OR gender = 'U'), " +
             "dob DATE)";
     String createTableCourses = "CREATE TABLE Students.Courses (" +
-            "courseId CHAR(12) PRIMARY KEY REFERENCES Schedule(courseId), " +
+            "courseId CHAR(12) PRIMARY KEY REFERENCES Students.Schedule(courseId), " +
             "title VARCHAR(64), " +
             "department CHAR(16), " +
-            "program VARCHAR(48)";
+            "program VARCHAR(48))";
     String createTableClasses = "CREATE TABLE Students.Classes (" +
             "empId INT REFERENCES Student(empId), " +
             "courseId CHAR(12) REFERENCES Schedule (courseId), " +
@@ -43,10 +43,15 @@ public interface StudentsDatabaseInterface {
              " WHERE instructor = " + nameNewInstructor; //SHOULDN'T THE TWO ABOVE BE SWITCHED??
     }
 
-    static String insertTableCourses (String nameTable, String nameFromTable) {
-     return "INSERT INTO " + nameTable +
+    static String insertTableCourses (String nameToTable, String nameFromTable) {
+     return "INSERT INTO " + nameToTable +
              " SELECT courseId, title, department, program" +
              " FROM " + nameFromTable;
+    }
+    static String insertTableClasses (String nameToTable, String nameFromTable) {
+        return "INSERT INTO " + nameToTable +
+                " SELECT courseId, empId, sectionNumber, year, semester, grade" +
+                " FROM " + nameFromTable;
     }
 
 }
