@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-enum Gender { F, M, U};
+enum myGender { F, M, U};
 enum mySemester {FALL, WINTER, SUMMER, SPRING};
 enum myGrade { A,B,C,D,F,W };
 public class StudentsDatabase implements StudentsDatabaseInterface, TableInterface{
@@ -27,22 +27,22 @@ public class StudentsDatabase implements StudentsDatabaseInterface, TableInterfa
 
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(StudentsDatabaseInterface.dropSchema);
-            System.out.println("Schema dropped");
+            System.out.println("\nSchema dropped");
 
         }
         catch (SQLException e) {
-            System.out.println("Schema not dropped");
+            System.out.println("\nSchema not dropped");
             e.printStackTrace();
         }
 
         //CREATE SCHEMA
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(StudentsDatabaseInterface.createSchema);
-            System.out.println("Schema created");
+            System.out.println("\nSchema created");
 
         }
         catch (SQLException e) {
-            System.out.println("Schema not created");
+            System.out.println("\nSchema not created");
             e.printStackTrace();
         }
     }
@@ -88,12 +88,12 @@ public class StudentsDatabase implements StudentsDatabaseInterface, TableInterfa
 
             // Create Table
             TableInterface.dropTable(connection, nameTable);
-            TableInterface.createTable(connection, createTable);
+            TableInterface.createTable(connection, createTable, nameTable);
 
 
             // Populate Table
             TableInterface.setLocalInFileLoading(connection);
-            TableInterface.populateTable(connection, populateTable);
+            TableInterface.populateTable(connection, populateTable,nameTable);
 
 
         }
@@ -105,16 +105,17 @@ public class StudentsDatabase implements StudentsDatabaseInterface, TableInterfa
 
         String nameTable;
 
-        public Students (String createTable, String nameTable) throws SQLException {
+        public Students (String createTable, String nameTable, String sql) throws SQLException {
             this.createTable = createTable;
             this.nameTable = nameTable;
 
             // Create Table
             TableInterface.dropTable(connection, nameTable);
-            TableInterface.createTable(connection, createTable);
+            TableInterface.createTable(connection, createTable,nameTable);
 
             // Populate Table
-            //TableInterface.populateTable(connection, populateTable);
+
+            TableInterface.populateTable(connection, sql,nameTable);
         }
     }
     public class Courses{
@@ -132,10 +133,10 @@ public class StudentsDatabase implements StudentsDatabaseInterface, TableInterfa
 
             // Create Table
             TableInterface.dropTable(connection, nameToTable);
-            TableInterface.createTable(connection, createTable);
+            TableInterface.createTable(connection, createTable,nameToTable);
 
             // Populate Table
-            TableInterface.populateTable(connection, populateTable);
+            TableInterface.populateTable(connection, populateTable,nameToTable);
         }
     }
     public class Classes{
@@ -151,10 +152,10 @@ public class StudentsDatabase implements StudentsDatabaseInterface, TableInterfa
 
             // Create Table
             TableInterface.dropTable(connection, nameTable);
-            TableInterface.createTable(connection, createTable);
+            TableInterface.createTable(connection, createTable,nameTable);
 
             // Populate Table
-            //TableInterface.populateTable(connection, populateTable);
+            //TableInterface.populateTable(connection, populateTable,nameTable);
         }
     }
     public class AggregateGrades{

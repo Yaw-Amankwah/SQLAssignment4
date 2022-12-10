@@ -26,14 +26,14 @@ public interface TableInterface {
     }
 
     // Create a Table
-    static void createTable (Connection connection, String createTable) throws SQLException {
+    static void createTable (Connection connection, String createTable, String nameTable) throws SQLException {
         PreparedStatement psCreateTable = connection.prepareStatement(createTable);
         try {
             psCreateTable.executeUpdate();
-            System.out.println("\nTable created successfully!");
+            System.out.println("\nTable created successfully: " + nameTable);
         }
         catch (SQLException e) {
-            System.out.println("\nError in createTable!");
+            System.out.println("\nError in createTable: " + nameTable);
             System.out.println(e);
         }
     }
@@ -61,14 +61,14 @@ public interface TableInterface {
                 " IGNORE 1 LINES;";
     }
 
-    static void populateTable(Connection connection, String populateTable) throws SQLException {
+    static void populateTable(Connection connection, String populateTable, String nameTable) throws SQLException {
         Statement statement = connection.createStatement();
         try{
             statement.executeUpdate(populateTable);
-            System.out.println("\nTable populated successfully");
+            System.out.println("\nTable populated successfully: " + nameTable);
         }
         catch(SQLException e) {
-            System.out.println("\nError in populate Table");
+            System.out.println("\nError in populate Table: " + nameTable);
             System.out.println(e);
         }
     }

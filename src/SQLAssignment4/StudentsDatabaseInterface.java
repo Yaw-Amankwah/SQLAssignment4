@@ -5,6 +5,7 @@ public interface StudentsDatabaseInterface {
     String createSchema = "CREATE SCHEMA Students ";
     String createTableSchedule = "CREATE TABLE Students.Schedule (" +
             "courseId CHAR(12) NOT NULL UNIQUE, " +
+            "sectionNumber VARCHAR(64), " +
             "title VARCHAR(64), " +
             "year INT, " +
             "semester CHAR(6), " +
@@ -13,13 +14,15 @@ public interface StudentsDatabaseInterface {
             "program VARCHAR(48), " +
             "PRIMARY KEY(courseId))";//, sectionNumber))";
     String createTableStudents = "CREATE TABLE Students.Students (" +
-            "empId INT PRIMARY KEY, " +
-            "name VARCHAR(32) NOT NULL, " +
-            "gender CHAR CHECK (gender = 'F' OR gender = 'M' OR gender = 'U'), " +
-            "dob DATE)";
+            "empId VARCHAR(32) PRIMARY KEY, " +
+            "firstName VARCHAR(32) NOT NULL, " +
+            "lastName VARCHAR(32) NOT NULL, " +
+            "email VARCHAR(32) NOT NULL, " +
+            "gender CHAR CHECK (gender = 'F' OR gender = 'M' OR gender = 'U'))"; //, " +
+           // "dob DATE)";
     String createTableCourses = "CREATE TABLE Students.Courses (" +
             "courseId CHAR(12) PRIMARY KEY REFERENCES Students.Schedule(courseId), " +
-            "title VARCHAR(64), " +
+            "sectionNumber VARCHAR(64), " +
             "department CHAR(16), " +
             "program VARCHAR(48))";
     String createTableClasses = "CREATE TABLE Students.Classes (" +
@@ -45,7 +48,7 @@ public interface StudentsDatabaseInterface {
 
     static String insertTableCourses (String nameToTable, String nameFromTable) {
      return "INSERT INTO " + nameToTable +
-             " SELECT courseId, title, department, program" +
+             " SELECT courseId, sectionNumber, department, program" +
              " FROM " + nameFromTable;
     }
     static String insertTableClasses (String nameToTable, String nameFromTable) {
