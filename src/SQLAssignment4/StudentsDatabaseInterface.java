@@ -22,7 +22,7 @@ public interface StudentsDatabaseInterface {
            // "dob DATE)";
     String createTableCourses = "CREATE TABLE Students.Courses (" +
             "courseId CHAR(12) PRIMARY KEY REFERENCES Students.Schedule(courseId), " +
-            "sectionNumber VARCHAR(64), " +
+            "title VARCHAR(64), " +
             "department CHAR(16), " +
             "program VARCHAR(48))";
     String createTableClasses = "CREATE TABLE Students.Classes (" +
@@ -48,7 +48,7 @@ public interface StudentsDatabaseInterface {
 
     static String insertTableCourses (String nameToTable, String nameFromTable) {
      return "INSERT INTO " + nameToTable +
-             " SELECT courseId, sectionNumber, department, program" +
+             " SELECT courseId, title, department, program" +
              " FROM " + nameFromTable;
     }
     static String insertTableClasses (String nameToTable, String nameFromTable) {
