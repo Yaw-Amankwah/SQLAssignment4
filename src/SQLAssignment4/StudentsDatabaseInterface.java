@@ -1,5 +1,7 @@
 package SQLAssignment4;
 
+import java.util.Map;
+
 public interface StudentsDatabaseInterface {
     String dropSchema = "DROP SCHEMA IF EXISTS Students";
     String createSchema = "CREATE SCHEMA Students ";
@@ -12,21 +14,20 @@ public interface StudentsDatabaseInterface {
             "instructor VARCHAR(24), " +
             "department CHAR(16), " +
             "program VARCHAR(48), " +
-            "PRIMARY KEY(courseId))";//, sectionNumber))";
+            "PRIMARY KEY(courseId))";
     String createTableStudents = "CREATE TABLE Students.Students (" +
             "empId VARCHAR(32) PRIMARY KEY, " +
             "firstName VARCHAR(32) NOT NULL, " +
             "lastName VARCHAR(32) NOT NULL, " +
             "email VARCHAR(32) NOT NULL, " +
-            "gender CHAR CHECK (gender = 'F' OR gender = 'M' OR gender = 'U'))"; //, " +
-           // "dob DATE)";
+            "gender CHAR CHECK (gender = 'F' OR gender = 'M' OR gender = 'U'))";
     String createTableCourses = "CREATE TABLE Students.Courses (" +
             "courseId CHAR(12) PRIMARY KEY REFERENCES Students.Schedule(courseId), " +
             "title VARCHAR(64), " +
             "department CHAR(16), " +
             "program VARCHAR(48))";
     String createTableClasses = "CREATE TABLE Students.Classes (" +
-            "empId INT REFERENCES Student(empId), " +
+            "empId VARCHAR(32) REFERENCES Student(empId), " +
             "courseId CHAR(12) REFERENCES Schedule (courseId), " +
             "sectionNumber VARCHAR(8) REFERENCES Schedule(sectionNumber), " +
             "year INT, " +
@@ -56,6 +57,7 @@ public interface StudentsDatabaseInterface {
                 " SELECT courseId, empId, sectionNumber, year, semester, grade" +
                 " FROM " + nameFromTable;
     }
+
 
 }
 

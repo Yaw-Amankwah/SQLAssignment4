@@ -144,10 +144,10 @@ public class StudentsDatabase implements StudentsDatabaseInterface, TableInterfa
         String populateTable;
         String nameTable;
 
-        public Classes(String createTable, String nameTable) throws SQLException {
+        public Classes(String createTable, String nameTable, String populateTable) throws SQLException {
             this.createTable = createTable;
             this.nameTable = nameTable;
-            //this.populateTable = StudentsDatabaseInterface.insertTableClasses(nameTable, "Students.Schedule");
+            this.populateTable = populateTable;
 
 
             // Create Table
@@ -155,7 +155,7 @@ public class StudentsDatabase implements StudentsDatabaseInterface, TableInterfa
             TableInterface.createTable(connection, createTable,nameTable);
 
             // Populate Table
-            //TableInterface.populateTable(connection, populateTable,nameTable);
+            TableInterface.populateTable(connection, populateTable,nameTable);
         }
     }
     public class AggregateGrades{

@@ -10,7 +10,6 @@ public class Main {
     static final String url = "jdbc:mysql://localhost:3306/?autoReconnect=true&zeroDateTimeBehavior=convertToNull&useUnicode=yes&characterEncoding=UTF-8&allowLoadLocalInfile=true";
     static final String username = "root";
     static final String password = "Jynda$1226!";
-    static final String fileName = "/Users/yawamankwah/Desktop/FALL2022/CSC221/SQLAssignment4/Resources/ScheduleSpring2022.txt";
     public static void main(String[] args) throws SQLException {
 
         StudentsDatabase DB = new StudentsDatabase(url, username,password);
@@ -23,16 +22,16 @@ public class Main {
         //Create Populate Table Schedule
         nameTable = "Students.Schedule";
         createTable = StudentsDatabaseInterface.createTableSchedule;
-        StudentsDatabase.Schedule schedule = DB.new Schedule(createTable,fileName,nameTable);
+        DB.new Schedule(createTable,fileName,nameTable);
 
         //Create Populate Table Courses
         String nameToTable = "Students.Courses";
         String nameFromTable = "Students.Schedule";
         createTable = StudentsDatabaseInterface.createTableCourses;
-        StudentsDatabase.Courses courses = DB.new Courses(createTable,nameToTable,nameFromTable);
+        DB.new Courses(createTable,nameToTable,nameFromTable);
 
         //CREATE ARRAY OF STUDENT FIELDS
-        int numStudents = 50;
+        int numStudents = 20;
         ArrayList<String> empIdList = new ArrayList<>();
         for (int i = 0; i < numStudents; i++) {
             Random rnd = new Random();
@@ -105,13 +104,13 @@ public class Main {
         for (int i = 0; i < numStudents; i++) {
             sql.append(glue);
             sql.append("('");
-            sql.append(studentList.get(i).getEmpId().toString().replace(",", "''"));
+            sql.append(studentList.get(i).getEmpId().replace(",", "''"));
             sql.append("', '");
-            sql.append(studentList.get(i).getFirstName().toString().replace(",", "''"));
+            sql.append(studentList.get(i).getFirstName().replace(",", "''"));
             sql.append("', '");
-            sql.append(studentList.get(i).getLastName().toString().replace(",", "''"));
+            sql.append(studentList.get(i).getLastName().replace(",", "''"));
             sql.append("', '");
-            sql.append(studentList.get(i).getEmail().toString().replace(",", "''"));
+            sql.append(studentList.get(i).getEmail().replace(",", "''"));
             sql.append("', '");
             sql.append(studentList.get(i).getGender().toString().replace(",", "''"));
             sql.append("')");
@@ -119,6 +118,67 @@ public class Main {
         }
 
         createTable = StudentsDatabaseInterface.createTableStudents;
-        StudentsDatabase.Students students = DB.new Students (createTable, nameTable, sql.toString());
+        DB.new Students (createTable, nameTable, sql.toString());
+
+
+        int numClasses = 4;
+        String numClassesString = String.valueOf(numClasses);
+       for (Student student: studentList) {
+           Statement statement = connection.createStatement();
+           String sqlString =
+                   "SELECT DISTINCT courseId, sectionNumber,year,semester " +
+                   "FROM Students.Schedule " +
+                   //"WHERE program = 'Undergraduate' ";// +
+                   "ORDER BY RAND() " +
+                   "LIMIT " + numClassesString;
+           ResultSet resultset = statement.executeQuery(sqlString);
+           ArrayList<String> classes = new ArrayList<>();
+           ArrayList<String> sectionNumbers = new ArrayList<>();
+           ArrayList<String> classYears = new ArrayList<>();
+           ArrayList<String> classSemester = new ArrayList<>();
+           ArrayList<String> classGrades = new ArrayList<>();
+           while (resultset.next()) {
+               classes.add(resultset.getString("courseId"));
+               sectionNumbers.add(resultset.getString("sectionNumber"));
+               classYears.add(resultset.getString("year"));
+               classSemester.add(resultset.getString("semester"));
+               classGrades.add(myGrade.values()[new Random().nextInt(myGrade.values().length)].toString());
+           }
+           student.setClasses(classes);
+           student.setStudentGrades(classGrades);
+           student.setStudentYears(classYears);
+           student.setStudentSemester(classSemester);
+           student.setStudentSectionNumbers(sectionNumbers);
+       }
+
+
+        nameTable = "Students.Classes";
+        StringBuilder sqlClasses = new StringBuilder();
+        sqlClasses.append("INSERT INTO " + nameTable + " (empId, courseId, sectionNumber, year, semester, grade) VALUES ");
+        String glueClasses = "";
+        for (Student student:studentList) {
+            for (int i = 0; i < numClasses; i++) {
+                sqlClasses.append(glueClasses);
+                sqlClasses.append("('");
+                sqlClasses.append(student.getEmpId().replace(",", "''"));
+                sqlClasses.append("', '");
+                sqlClasses.append(student.getStudentClasses().get(i).replace(",", "''"));
+                sqlClasses.append("', '");
+                sqlClasses.append(student.getStudentSectionNumbers().get(i).replace(",", "''"));
+                sqlClasses.append("', '");
+                sqlClasses.append(student.getStudentYears().get(i).replace(",", "''"));
+                sqlClasses.append("', '");
+                sqlClasses.append(student.getStudentSemester().get(i).replace(",", "''"));
+                sqlClasses.append("', '");
+                sqlClasses.append(student.getStudentGrades().get(i).replace(",", "''"));
+                sqlClasses.append("')");
+                glueClasses = ", ";
+            }
+        }
+
+        createTable = StudentsDatabaseInterface.createTableClasses;
+        DB.new Classes(createTable, nameTable,sqlClasses.toString());
+
+
     }
 }
